@@ -1,0 +1,7 @@
+# ignore internal Visual Studio Folder
+.vs
+.vs/*
+
+#Ignore Unity Temp Folder
+Temp
+Temp/*
