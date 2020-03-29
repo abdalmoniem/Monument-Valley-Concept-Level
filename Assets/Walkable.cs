@@ -5,7 +5,7 @@ using UnityEngine;
 public class Walkable : MonoBehaviour
 {
 
-    public List<WalkPath> possiblePaths = new List<WalkPath>();
+    public List<WalkPath> possiblePaths;
 
     [Space]
 
@@ -24,6 +24,11 @@ public class Walkable : MonoBehaviour
     [Header("Offsets")]
     public float walkPointOffset = .5f;
     public float stairOffset = .4f;
+
+    public Walkable()
+    {
+        possiblePaths = new List<WalkPath>();
+    }
 
     public Vector3 GetWalkPoint()
     {

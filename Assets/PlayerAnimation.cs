@@ -9,10 +9,9 @@ public class PlayerAnimation : MonoBehaviour
 
     void Update()
     {
-        if(animator != null && player != null)
+        if (animator != null && player != null)
+        {
             animator.SetBool("walking", player.walking);
-
-
-        
+        }
     }
 }

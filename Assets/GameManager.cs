@@ -31,12 +31,16 @@ public class GameManager : MonoBehaviour
                     count++;
                 }
             }
-            foreach(SinglePath sp in pc.paths)
+            foreach (SinglePath sp in pc.paths)
+            {
                 sp.block.possiblePaths[sp.index].active = (count == pc.conditions.Count);
+            }
         }
 
         if (player.walking)
+        {
             return;
+        }
 
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
@@ -71,6 +75,7 @@ public class PathCondition
     public List<Condition> conditions;
     public List<SinglePath> paths;
 }
+
 [System.Serializable]
 public class Condition
 {
@@ -78,6 +83,7 @@ public class Condition
     public Vector3 eulerAngle;
 
 }
+
 [System.Serializable]
 public class SinglePath
 {

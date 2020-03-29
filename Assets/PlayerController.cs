@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using DG.Tweening;
+using UnityEngine.UI;
 
 [SelectionBase]
 public class PlayerController : MonoBehaviour
@@ -11,6 +12,8 @@ public class PlayerController : MonoBehaviour
 
     [Space]
 
+    [Header("Transforms")]
+    
     public Transform currentCube;
     public Transform clickedCube;
     public Transform indicator;
@@ -18,11 +21,18 @@ public class PlayerController : MonoBehaviour
     [Space]
 
     public List<Transform> finalPath = new List<Transform>();
+    public ParticleSystem endGameParticleSystem;
+    public Text endGameText;
 
     private float blend;
 
     void Start()
     {
+        endGameParticleSystem.gameObject.SetActive(false);
+        endGameParticleSystem.Stop();
+
+        endGameText.gameObject.SetActive(false);
+        
         RayCastDown();
     }
 
@@ -125,13 +135,17 @@ public class PlayerController : MonoBehaviour
         {
             finalPath.Add(cube);
             if (cube.GetComponent<Walkable>().previousBlock != null)
+            {
                 cube = cube.GetComponent<Walkable>().previousBlock;
+            }
             else
+            {
                 return;
+            }
         }
 
         finalPath.Insert(0, clickedCube);
-        
+
         FollowPath();
     }
 
@@ -147,13 +161,15 @@ public class PlayerController : MonoBehaviour
 
             s.Append(transform.DOMove(finalPath[i].GetComponent<Walkable>().GetWalkPoint(), .2f * time).SetEase(Ease.Linear));
 
-            if(!finalPath[i].GetComponent<Walkable>().dontRotate)
-               s.Join(transform.DOLookAt(finalPath[i].position, .1f, AxisConstraint.Y, Vector3.up));
+            if (!finalPath[i].GetComponent<Walkable>().dontRotate)
+            {
+                s.Join(transform.DOLookAt(finalPath[i].position, .1f, AxisConstraint.Y, Vector3.up));
+            }
         }
 
         if (clickedCube.GetComponent<Walkable>().isButton)
         {
-            s.AppendCallback(()=>GameManager.instance.RotateRightPivot());
+            s.AppendCallback(() => GameManager.instance.RotateRightPivot());
         }
 
         s.AppendCallback(() => Clear());
@@ -198,6 +214,19 @@ public class PlayerController : MonoBehaviour
         Gizmos.color = Color.red;
         Ray ray = new Ray(transform.GetChild(0).position, -transform.up);
         Gizmos.DrawRay(ray);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag.Equals("Finish Cube"))
+        {
+            endGameParticleSystem.gameObject.SetActive(true);
+            endGameParticleSystem.Play();
+
+            endGameText.gameObject.SetActive(true);
+
+            Debug.Log("Hurraaaaay!!!");
+        }
     }
 
     float GetBlend()
