@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Finish Cube
+  - Platform Rotator
   layers:
   - Default
   - TransparentFX

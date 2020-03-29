@@ -13,10 +13,11 @@ public class PlayerController : MonoBehaviour
     [Space]
 
     [Header("Transforms")]
-    
+
     public Transform currentCube;
     public Transform clickedCube;
     public Transform indicator;
+    public List<Transform> pivots;
 
     [Space]
 
@@ -32,15 +33,16 @@ public class PlayerController : MonoBehaviour
         endGameParticleSystem.Stop();
 
         endGameText.gameObject.SetActive(false);
-        
+
         RayCastDown();
     }
 
     void Update()
     {
+        Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit mouseHit;
 
         //GET CURRENT CUBE (UNDER PLAYER)
-
         RayCastDown();
 
         if (currentCube.GetComponent<Walkable>().movingGround)
@@ -53,16 +55,14 @@ public class PlayerController : MonoBehaviour
         }
 
         // CLICK ON CUBE
-
         if (Input.GetMouseButtonDown(0))
         {
-            Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition); RaycastHit mouseHit;
-
             if (Physics.Raycast(mouseRay, out mouseHit))
             {
                 if (mouseHit.transform.GetComponent<Walkable>() != null)
                 {
                     clickedCube = mouseHit.transform;
+
                     DOTween.Kill(gameObject.transform);
                     finalPath.Clear();
                     FindPath();
@@ -73,9 +73,8 @@ public class PlayerController : MonoBehaviour
                     Sequence s = DOTween.Sequence();
                     s.AppendCallback(() => indicator.GetComponentInChildren<ParticleSystem>().Play());
                     s.Append(indicator.GetComponent<Renderer>().material.DOColor(Color.white, .1f));
-                    s.Append(indicator.GetComponent<Renderer>().material.DOColor(Color.black, .3f).SetDelay(.2f));
+                    s.Append(indicator.GetComponent<Renderer>().material.DOColor(Color.red, .3f).SetDelay(.2f));
                     s.Append(indicator.GetComponent<Renderer>().material.DOColor(Color.clear, .3f));
-
                 }
             }
         }
@@ -200,6 +199,10 @@ public class PlayerController : MonoBehaviour
                 if (playerHit.transform.GetComponent<Walkable>().isStair)
                 {
                     DOVirtual.Float(GetBlend(), blend, .1f, SetBlend);
+                }
+                else if (playerHit.transform.GetComponent<Walkable>().isButton)
+                {
+                    currentCube.GetChild(0).transform.position = currentCube.GetChild(0).transform.parent.transform.position + new Vector3(0, 0.2f, 0);
                 }
                 else
                 {
