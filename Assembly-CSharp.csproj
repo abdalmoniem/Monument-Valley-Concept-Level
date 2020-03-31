@@ -70,10 +70,10 @@
     <Compile Include="Assets\DOTween\Modules\DOTweenModuleUI.cs" />
     <Compile Include="Assets\DOTween\Modules\DOTweenModuleUnityVersion.cs" />
     <Compile Include="Assets\DOTween\Modules\DOTweenModuleUtils.cs" />
-    <Compile Include="Assets\GameManager.cs" />
-    <Compile Include="Assets\PlayerAnimation.cs" />
-    <Compile Include="Assets\PlayerController.cs" />
-    <Compile Include="Assets\Walkable.cs" />
+    <Compile Include="Assets\Scripts\GameManager.cs" />
+    <Compile Include="Assets\Scripts\PlayerAnimation.cs" />
+    <Compile Include="Assets\Scripts\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Walkable.cs" />
     <None Include="Assets\DOTween\readme.txt" />
     <None Include="Assets\MaxTurnbull\MonumentValleyFiles\Shader\MainShader.shader" />
     <Reference Include="Unity.Timeline.Editor">

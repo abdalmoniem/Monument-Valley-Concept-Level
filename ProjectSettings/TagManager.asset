@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Finish Cube
   - Platform Rotator
+  - Simple Rotator
   layers:
   - Default
   - TransparentFX
