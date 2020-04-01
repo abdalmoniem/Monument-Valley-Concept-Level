@@ -33,6 +33,15 @@ public class PlayerController : MonoBehaviour
 
     private int sceneIndex;
 
+    float GetBlend()
+    {
+        return GetComponentInChildren<Animator>().GetFloat("Blend");
+    }
+    void SetBlend(float x)
+    {
+        GetComponentInChildren<Animator>().SetFloat("Blend", x);
+    }
+
     void Start()
     {
         //endGameParticleSystem.gameObject.SetActive(false);
@@ -80,9 +89,9 @@ public class PlayerController : MonoBehaviour
                     indicator.position = mouseHit.transform.GetComponent<Walkable>().GetWalkPoint();
                     Sequence s = DOTween.Sequence();
                     s.AppendCallback(() => indicator.GetComponentInChildren<ParticleSystem>().Play());
-                    s.Append(indicator.GetComponent<Renderer>().material.DOColor(Color.white, .1f));
-                    s.Append(indicator.GetComponent<Renderer>().material.DOColor(Color.red, .3f).SetDelay(.2f));
-                    s.Append(indicator.GetComponent<Renderer>().material.DOColor(Color.clear, .3f));
+                    s.Append(indicator.GetComponent<Renderer>().material.DOColor(Color.white, 0.1f));
+                    s.Append(indicator.GetComponent<Renderer>().material.DOColor(Color.red, 0.3f).SetDelay(0.2f));
+                    s.Append(indicator.GetComponent<Renderer>().material.DOColor(Color.clear, 0.3f));
                 }
             }
         }
@@ -111,7 +120,7 @@ public class PlayerController : MonoBehaviour
         //                foreach (Transform pv in pivots)
         //                {
         //                    pv.DOComplete();
-        //                    pv.DORotate(new Vector3(90 * multiplier, 0, 0), .6f, RotateMode.WorldAxisAdd).SetEase(Ease.OutBack);
+        //                    pv.DORotate(new Vector3(90 * multiplier, 0, 0), 0.6f, RotateMode.WorldAxisAdd).SetEase(Ease.OutBack);
         //                }
         //            }
 
@@ -136,11 +145,11 @@ public class PlayerController : MonoBehaviour
 
         pastCubes.Add(currentCube);
 
-        ExploreCube(nextCubes, pastCubes);
+        ExplorePaths(nextCubes, pastCubes);
         BuildPath();
     }
 
-    void ExploreCube(List<Transform> nextCubes, List<Transform> visitedCubes)
+    void ExplorePaths(List<Transform> nextCubes, List<Transform> visitedCubes)
     {
         Transform current = nextCubes.First();
         nextCubes.Remove(current);
@@ -163,7 +172,7 @@ public class PlayerController : MonoBehaviour
 
         if (nextCubes.Any())
         {
-            ExploreCube(nextCubes, visitedCubes);
+            ExplorePaths(nextCubes, visitedCubes);
         }
     }
 
@@ -198,11 +207,11 @@ public class PlayerController : MonoBehaviour
         {
             float time = finalPath[i].GetComponent<Walkable>().isStair ? 1.5f : 1;
 
-            s.Append(transform.DOMove(finalPath[i].GetComponent<Walkable>().GetWalkPoint(), .2f * time).SetEase(Ease.Linear));
+            s.Append(transform.DOMove(finalPath[i].GetComponent<Walkable>().GetWalkPoint(), 0.2f * time).SetEase(Ease.Linear));
 
             if (!finalPath[i].GetComponent<Walkable>().dontRotate)
             {
-                s.Join(transform.DOLookAt(finalPath[i].position, .1f, AxisConstraint.Y, Vector3.up));
+                s.Join(transform.DOLookAt(finalPath[i].position, 0.1f, AxisConstraint.Y, Vector3.up));
             }
         }
 
@@ -211,10 +220,10 @@ public class PlayerController : MonoBehaviour
             s.AppendCallback(() => GameManager.instance.RotateRightPivot());
         }
 
-        s.AppendCallback(() => Clear());
+        s.AppendCallback(() => ClearPath());
     }
 
-    void Clear()
+    void ClearPath()
     {
         foreach (Transform t in finalPath)
         {
@@ -234,11 +243,13 @@ public class PlayerController : MonoBehaviour
         {
             if (playerHit.transform.GetComponent<Walkable>() != null)
             {
+                //Debug.Log("found walkable: " + playerHit.transform.gameObject.name);
+
                 currentCube = playerHit.transform;
 
                 if (playerHit.transform.GetComponent<Walkable>().isStair)
                 {
-                    DOVirtual.Float(GetBlend(), blend, .1f, SetBlend);
+                    DOVirtual.Float(GetBlend(), blend, 0.1f, SetBlend);
                 }
                 else if (playerHit.transform.GetComponent<Walkable>().isButton)
                 {
@@ -246,9 +257,17 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
-                    DOVirtual.Float(GetBlend(), 0, .1f, SetBlend);
+                    DOVirtual.Float(GetBlend(), 0, 0.1f, SetBlend);
                 }
             }
+            else
+            {
+                //Debug.Log("found transform: " + playerHit.transform.gameObject.name);
+            }
+        }
+        else
+        {
+            //Debug.Log("Didn't Hit");
         }
     }
 
@@ -266,7 +285,7 @@ public class PlayerController : MonoBehaviour
             if (sceneIndex == 0)
             {
                 Transform cameraTransform = Camera.main.transform;
-                Camera.main.transform.DOMove(new Vector3(cameraTransform.position.x, 55, Camera.main.transform.position.z), 2.5f).SetEase(Ease.Linear);
+                Camera.main.transform.DOMove(new Vector3(cameraTransform.position.x, 45, Camera.main.transform.position.z), 2.5f).SetEase(Ease.Linear);
             }
             else if (sceneIndex == 1)
             {
@@ -279,14 +298,4 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-    float GetBlend()
-    {
-        return GetComponentInChildren<Animator>().GetFloat("Blend");
-    }
-    void SetBlend(float x)
-    {
-        GetComponentInChildren<Animator>().SetFloat("Blend", x);
-    }
-
 }

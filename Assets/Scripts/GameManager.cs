@@ -46,7 +46,12 @@ public class GameManager : MonoBehaviour
             int count = 0;
             for (int i = 0; i < pc.conditions.Count; i++)
             {
-                if (pc.conditions[i].conditionObject.eulerAngles == pc.conditions[i].eulerAngle)
+                if ((pc.conditions[i].conditionObject.eulerAngles.x >= (pc.conditions[i].eulerAngle.x - 0.1f)) &&
+                    (pc.conditions[i].conditionObject.eulerAngles.x <= (pc.conditions[i].eulerAngle.x + 0.1f)) &&
+                    (pc.conditions[i].conditionObject.eulerAngles.y >= (pc.conditions[i].eulerAngle.y - 0.1f)) &&
+                    (pc.conditions[i].conditionObject.eulerAngles.y <= (pc.conditions[i].eulerAngle.y + 0.1f)) &&
+                    (pc.conditions[i].conditionObject.eulerAngles.z >= (pc.conditions[i].eulerAngle.z - 0.1f)) &&
+                    (pc.conditions[i].conditionObject.eulerAngles.z <= (pc.conditions[i].eulerAngle.z + 0.1f)))
                 {
                     count++;
                 }
@@ -73,14 +78,14 @@ public class GameManager : MonoBehaviour
                 foreach (Transform pv in pivots)
                 {
                     pv.DOComplete();
-                    pv.DORotate(new Vector3(90 * multiplier, 0, 0), .6f, RotateMode.WorldAxisAdd).SetEase(Ease.OutBack);
+                    pv.DORotate(new Vector3(90 * multiplier, 0, 0), 0.5f, RotateMode.WorldAxisAdd).SetEase(Ease.OutBack);
                 }
             }
             else if (sceneIndex == 1)
             {
                 int multiplier = Input.GetKey(KeyCode.RightArrow) ? 1 : -1;
                 pivots[0].DOComplete();
-                pivots[0].DORotate(new Vector3(0, 90 * multiplier, 0), .6f, RotateMode.WorldAxisAdd).SetEase(easeOutPattern);
+                pivots[0].DORotate(new Vector3(0, 90 * multiplier, 0), 0.5f, RotateMode.WorldAxisAdd).SetEase(easeOutPattern);
             }
         }
 
@@ -107,7 +112,7 @@ public class GameManager : MonoBehaviour
                         }
 
                         pivots[0].DOComplete();
-                        pivots[0].DORotate(new Vector3(0, 90 * multiplier, 0), .6f, RotateMode.WorldAxisAdd).SetEase(easeOutPattern);
+                        pivots[0].DORotate(new Vector3(0, 90 * multiplier, 0), 0.5f, RotateMode.WorldAxisAdd).SetEase(easeOutPattern);
                     }
                 }
             }

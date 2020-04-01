@@ -75,7 +75,7 @@
     <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Walkable.cs" />
     <None Include="Assets\DOTween\readme.txt" />
-    <None Include="Assets\MaxTurnbull\MonumentValleyFiles\Shader\MainShader.shader" />
+    <None Include="Assets\3D Models\MonumentValleyFiles\Shader\MainShader.shader" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/Projects/Open Source Projects/Monument-Valley-Concept-Level/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
